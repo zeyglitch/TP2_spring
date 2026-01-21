@@ -33,7 +33,7 @@ public class Categorie {
 
 	@ToString.Exclude
 
-	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "categorie")
+	@OneToMany(mappedBy = "categorie")
 	private List<Medicament> medicaments = new LinkedList<>();
 
 }

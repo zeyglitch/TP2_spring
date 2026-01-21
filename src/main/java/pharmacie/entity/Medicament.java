@@ -45,8 +45,7 @@ public class Medicament {
 	@Column(length = 500)
 	private String imageURL;
 
-	@ManyToOne(optional = false)
-	@NonNull
+	@ManyToOne(optional = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@ToString.Exclude
 	@Getter
 	@Setter

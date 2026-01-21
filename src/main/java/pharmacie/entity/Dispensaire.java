@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -48,5 +51,13 @@ public class Dispensaire {
 
     @Embedded
     private AdressePostale adresse;
+
+    @PrePersist
+    private void ensureCode() {
+        if (this.code == null || this.code.trim().isEmpty()) {
+            // generate a short code of max length 5
+            this.code = UUID.randomUUID().toString().substring(0, 5).toUpperCase();
+        }
+    }
 
 }
