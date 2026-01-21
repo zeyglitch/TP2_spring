@@ -1,3 +1,4 @@
+
 package pharmacie.entity;
 
 import jakarta.persistence.Column;
@@ -7,24 +8,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Embeddable // Indique que cette classe n'est pas une table, mais une partie d'une table
-@Data @NoArgsConstructor @AllArgsConstructor
+@Embeddable
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AdressePostale {
 
-    // On mappe le champ "rue" de l'UML vers la colonne "ADRESSE" de la BDD
-    @Column(name = "ADRESSE", length = 60) 
+    // On laisse Spring gérer le nom physique "rue" ou on met "adresse" comme
+    // demandé
+    @Column(name = "ADRESSE", length = 60)
     @Size(max = 60)
     private String rue;
 
-    @Column(name = "CODE_POSTAL", length = 10)
+    // Supprimer l'attribut 'name' ici pour éviter le conflit avec le champ
+    // 'codePostal'
+    @Column(name = "code_postal", length = 10)
     @Size(max = 10)
-    private String codePostal;
+    private String codePostal; // Sera automatiquement mappé en "code_postal"
 
     @Column(length = 15)
     @Size(max = 15)
     private String ville;
 
-    // Ajoutés car présents dans le schéma logique (table) même si absents de l'UML simplifié
     @Column(length = 15)
     @Size(max = 15)
     private String pays;

@@ -8,18 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @ToString
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Commande {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer numero;
 
-    private LocalDate saisieLe; // Date de saisie
-    private LocalDate envoyeeLe; // Date d'envoi
+    private LocalDate saisieLe;
+    private LocalDate envoyeeLe;
 
-    // Utilisation de BigDecimal pour la précision monétaire (obligatoire en finance)
-    @Column(precision = 18, scale = 2) 
+    // Champs ajoutés pour correspondre aux tests
+    @Column(length = 50)
+    private String nom;
+    private Boolean estValidee;
+
+    @Column(precision = 18, scale = 2)
     private BigDecimal port;
 
     @Column(precision = 10, scale = 2)
@@ -28,17 +34,14 @@ public class Commande {
     @Column(length = 40)
     private String destinataire;
 
-    // Réutilisation de l'objet AdressePostale (Champs ADRESSE, VILLE, etc. dans la table COMMANDE)
     @Embedded
     private AdressePostale adresseLivraison;
 
-    // --- RELATION MANY-TO-ONE : Une commande appartient à un seul Dispensaire ---
     @ManyToOne(optional = false)
-    @JoinColumn(name = "DISPENSAIRE_CODE") // Nom de la clé étrangère dans la table COMMANDE
+    @JoinColumn(name = "DISPENSAIRE_CODE")
     private Dispensaire dispensaire;
 
-    // --- RELATION ONE-TO-MANY : Une commande contient plusieurs lignes ---
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude // Toujours exclure les listes du toString pour éviter les boucles infinies !
+    @ToString.Exclude
     private List<Ligne> lignes = new ArrayList<>();
 }

@@ -14,7 +14,11 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @ToString
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class Ligne {
 
     @Id
@@ -24,13 +28,10 @@ public class Ligne {
     @Min(value = 1, message = "La quantité doit être au moins de 1")
     private Integer quantite;
 
-    // --- RELATION MANY-TO-ONE vers COMMANDE ---
     @ManyToOne(optional = false)
     @JoinColumn(name = "COMMANDE_NUMERO")
     private Commande commande;
 
-    // --- RELATION MANY-TO-ONE vers MEDICAMENT ---
-    // Note : On suppose que l'entité Medicament existe déjà dans ton projet
     @ManyToOne(optional = false)
     @JoinColumn(name = "MEDICAMENT_REFERENCE")
     private Medicament medicament;

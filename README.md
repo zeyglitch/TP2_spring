@@ -54,7 +54,7 @@ Les dépôts gèrent l'accès aux entités via Spring Data JPA.
 mvn clean spring-boot:run
 ```
 
-L'application démarre sur le port **8080**  : `http://localhost:8080`
+L'application démarre sur le port **8080**  : [http://localhost:8080](http://localhost:8080)
 
 
 ### Données de test
