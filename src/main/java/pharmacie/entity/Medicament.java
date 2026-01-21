@@ -45,10 +45,20 @@ public class Medicament {
 	@Column(length = 500)
 	private String imageURL;
 
-	@ManyToOne(optional = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@Setter(AccessLevel.NONE)
+	@ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "CATEGORIE_CODE", nullable = false)
 	@ToString.Exclude
-	@Getter
-	@Setter
 	private Categorie categorie;
+	
+	public void setCategorie(Categorie categorie) {
+		if (this.categorie != null) {
+			this.categorie.getMedicaments().remove(this);
+		}
+		this.categorie = categorie;
+		if (categorie != null && !categorie.getMedicaments().contains(this)) {
+			categorie.getMedicaments().add(this);
+		}
+	}
 
 }

@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Min;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ public class Ligne {
     @Min(value = 1, message = "La quantité doit être au moins de 1")
     private Integer quantite;
 
+    @Setter(AccessLevel.NONE)
     @ManyToOne(optional = false)
     @JoinColumn(name = "COMMANDE_NUMERO")
     private Commande commande;
@@ -35,4 +37,14 @@ public class Ligne {
     @ManyToOne(optional = false)
     @JoinColumn(name = "MEDICAMENT_REFERENCE")
     private Medicament medicament;
+    
+    public void setCommande(Commande commande) {
+        if (this.commande != null) {
+            this.commande.getLignes().remove(this);
+        }
+        this.commande = commande;
+        if (commande != null && !commande.getLignes().contains(this)) {
+            commande.getLignes().add(this);
+        }
+    }
 }

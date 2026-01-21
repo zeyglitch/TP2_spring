@@ -41,6 +41,7 @@ public class Commande {
     @Embedded
     private AdressePostale adresseLivraison;
 
+    @Setter(AccessLevel.NONE)
     @ManyToOne(optional = false)
     @JoinColumn(name = "DISPENSAIRE_CODE")
     private Dispensaire dispensaire;
@@ -48,4 +49,26 @@ public class Commande {
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Ligne> lignes = new ArrayList<>();
+    
+    public void setDispensaire(Dispensaire dispensaire) {
+        if (this.dispensaire != null) {
+            this.dispensaire.getCommandes().remove(this);
+        }
+        this.dispensaire = dispensaire;
+        if (dispensaire != null && !dispensaire.getCommandes().contains(this)) {
+            dispensaire.getCommandes().add(this);
+        }
+    }
+    
+    public void addLigne(Ligne ligne) {
+        if (!lignes.contains(ligne)) {
+            lignes.add(ligne);
+            ligne.setCommande(this);
+        }
+    }
+    
+    public void removeLigne(Ligne ligne) {
+        lignes.remove(ligne);
+        ligne.setCommande(null);
+    }
 }

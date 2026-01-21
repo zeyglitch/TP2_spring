@@ -32,8 +32,28 @@ public class Categorie {
 	private String description;
 
 	@ToString.Exclude
-
-	@OneToMany(mappedBy = "categorie")
+	@OneToMany(mappedBy = "categorie", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	private List<Medicament> medicaments = new LinkedList<>();
+	
+	@PreRemove
+	private void checkMedicamentsBeforeRemoval() {
+		// Force l'initialisation de la collection si elle est lazy
+		// Avec EAGER fetch, la collection devrait toujours être initialisée
+		if (medicaments != null && !medicaments.isEmpty()) {
+			throw new IllegalStateException("Cannot delete category with associated medications");
+		}
+	}
+	
+	public void addMedicament(Medicament medicament) {
+		if (!medicaments.contains(medicament)) {
+			medicaments.add(medicament);
+			medicament.setCategorie(this);
+		}
+	}
+	
+	public void removeMedicament(Medicament medicament) {
+		medicaments.remove(medicament);
+		medicament.setCategorie(null);
+	}
 
 }
